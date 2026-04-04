@@ -10,8 +10,21 @@
 🎓 在读 | 💻 前端学习中
 
 - 🚀 现阶段目标：通过考核
+- 🔍  正在学习 ：HTML & CSS & Javascript
 
   ---
+
+  ## ⌨️ About Tasks
+
+-[查看gj的笔记](./gj的笔记/)
+
+-[查看GitHub学习笔记](./GitHub学习笔记/)
+
+-[查看markdown学习笔记](./markdown学习笔记/)
+
+-[查看markdown进阶笔记](./markdown进阶笔记/)
+
+---
   
 ## 🤝 Connect with me
 <p align="center">
