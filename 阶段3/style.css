@@ -1,0 +1,254 @@
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Microsoft YaHei', sans-serif;
+}
+body {
+    background-color: #fff9fb;
+    color: #555;
+    line-height: 1.6;
+}
+a {
+    color: #e989c1;
+  }
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* 头部样式 */
+header {
+    background-color: #fce4ec;
+    padding: 20px 0;
+    border-bottom: 2px solid #f8bbd9;
+}
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    display: flex;
+    align-items: center;
+}
+.logo img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 15px;
+    border: 2px solid #f8bbd9;
+    object-fit: cover;
+}
+.logo h1 {
+    color: #e989c1;
+    font-size: 24px;
+}
+
+/* 导航栏 */
+nav ul {
+    display: flex;
+    list-style: none;
+}
+nav ul li {
+    margin-left: 30px;
+}
+nav ul li a {
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 16px;
+}
+
+/* 主要内容 */
+.main-content {
+    display: flex;
+    margin: 30px 0;
+}
+.content {
+    flex: 3;
+    background-color: white;
+    padding: 25px;
+    margin-right: 20px;
+}
+.sidebar {
+    flex: 1;
+    background-color: white;
+    padding: 20px;
+}
+
+/* 页面标题 */
+.page-title {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #f8bbd9;
+}
+.page-title h2 {
+    color: #e989c1;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+.page-title p {
+    color: #888;
+    font-size: 16px;
+}
+
+/* 首页横幅 */
+.banner {
+    background-color: #fce4ec;
+    padding: 40px;
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
+}
+/* 内容区块 */
+.section {
+    margin-bottom: 30px;
+}
+.section h3 {
+    color: #e989c1;
+    font-size: 22px;
+    margin-bottom: 15px;
+    border-bottom: 1px dashed #f8bbd9;
+}
+
+/* 首页图片 */
+.image-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 20px 0;
+}
+.image-item {
+    flex: 1;
+    min-width: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+.image-item img {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    transition: transform 0.3s ease;
+}
+.image-item:hover img {
+    transform: scale(1.05);
+}
+.image-caption {
+    padding: 8px;
+    text-align: center;
+    background-color: #fce4ec;
+    font-size: 14px;
+}
+
+
+
+/* 个人档案 */
+.profile-info p {
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed #fce4ec;
+}
+
+/* 关于我页面 */
+.about-content {
+    display: flex;
+    gap: 20px;
+    margin-top: 15px;
+}
+.about-text {
+    flex: 2;
+}
+.about-image {
+    flex: 1;
+}
+.about-image img {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: contain;
+    background-color: #f9f9f9;
+    display: block;
+}
+
+/* 爱好列表样式 */
+.hobby-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.hobby-item {
+    background-color: #fce4ec;
+    padding: 15px;
+    flex: 1;
+    min-width: 200px;
+    text-align: center;
+}
+
+.hobby-item:hover {
+    transform: translateY(-5px);
+    
+}
+
+.hobby-icon {
+    font-size: 24px;
+    color: #e91e63;
+    margin-bottom: 10px;
+    display: block;
+}
+/* 时间线 */
+.timeline {
+    margin-top: 20px;
+}
+.timeline-item {
+    display: flex;
+    margin-bottom: 25px;
+}
+.timeline-date {
+    background-color: #ed96b343;
+    color: #e989c1;
+    padding: 8px 15px;
+    margin-right: 20px;
+    min-width: 120px;
+    text-align: center;
+    font-weight: bold;
+}
+.timeline-content h4 {
+    color: #e989c1;
+    margin-bottom: 5px;
+}
+/* 引用 */
+.quote {
+    background-color: #ed96b343;
+    padding: 15px;
+}
+.quote-author {
+    text-align: right;
+    margin-top: 10px;
+    font-style: italic;
+    color: #888;
+}
+
+/* 页脚 */
+footer {
+    background-color: #fce4ec;
+    padding: 20px 0;
+    text-align: center;
+    margin-top: 40px;
+    border-top: 2px solid #f8bbd9;
+}
+.sidebar-section{
+    margin-bottom: 15px;
+}
