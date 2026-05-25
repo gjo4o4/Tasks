@@ -420,10 +420,81 @@
 
 ## Flex布局
 
+`Flex`是`FlexibleBox`的缩写，意思为"弹性盒子"。`Flex`布局可轻松控制子元素的排列、对齐、分布，避免浮动和定位带来的的麻烦。`Flex`布局可以凭借灵活的空间分配和对齐能力，应用于各类一维布局场景：元素的水平/垂直居中，导航栏的均匀分配，卡片列表的自适应换行，侧边栏与主内容的布局...都能高效的解决问题。尤其非常适配于响应式设计
 
+- 基本概念
+
+  ![基本概念](https://i-blog.csdnimg.cn/blog_migrate/9a0ef4391ddbe39af2c40ec6e2535530.png)
+
+  1. 容器（`Container`）：应用`display`：`flex`/`inline-flex`的父元素
+  2. 项目（`Items`）：容器内的直接子元素，会自动成为弹性项
+  3. 主轴（`Main Axis`）（x轴）：项目排列的主要方向（默认水平从左到右）
+     - 主轴开始的位置(`main start`)：与边框的交叉点
+     - 主轴结束的位置(`main end`)
+     - 单个项目中占据的主轴空间：`main size`
+  4. 交叉轴（`Cross Axis`）(y轴)：与主轴垂直的方向（摩恩垂直从上到下）
+     - 交叉轴开始的位置（`cross start`）
+     - 交叉轴结束的位置（`cross end`）
+     - 单个项目占据的交叉轴的空间：`cross size`
+
+- 使用语法
+
+  
+
+- 容器属性（作用于父元素）
+
+  1. `display`:`flex`/`inline-flex`:开启flex布局
+
+     定义容器为弹性容器，子元素自动变为弹性项
+
+     - `flex`：容器为块级元素
+     - `inline-flex`:容器为行内元素
+     - 未使用`flex`
+
+     ![](https://i-blog.csdnimg.cn/direct/963cf1aa1c3c4b7b9ae8eb70299983fa.png)
+
+  2. `flex-direction`:
+
+  3. `flex-wrap`:
+
+  4. `flex-flow`:
+
+  5. `justify-content`:
+
+  6. `align-items`:
+
+  7. `align-content`:
+
+  
+
+- 项目属性
+
+  1. `order`:
+  2. `flex-grow`:
+  3. `flex-shrink`:
+  4. `flex-basis`:
+  5. `flex`:
+  6. `align-self`:
+  7. 
+
+- 常见应用场景
+
+- 注意！
 
 ## Gird布局
 
 - ...
 
   
+
+## Flex VS Gird布局
+
+- 
+
+- | 特性           | Flexbox                | Grid                   |
+  | :------------- | :--------------------- | :--------------------- |
+  | **布局维度**   | 一维                   | 二维                   |
+  | **最佳场景**   | 组件内部布局、线性排列 | 整体页面结构、复杂网格 |
+  | **内容适配**   | 内容驱动               | 容器驱动               |
+  | **代码复杂度** | 简单                   | 较高                   |
+  | **浏览器支持** | 更广泛                 | 较新                   |
