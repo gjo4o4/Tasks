@@ -453,33 +453,124 @@
 
      ![](https://i-blog.csdnimg.cn/direct/963cf1aa1c3c4b7b9ae8eb70299983fa.png)
 
-  2. `flex-direction`:
+  2. `flex-direction`:设置主轴方向
 
-  3. `flex-wrap`:
+     - `row`:主轴为横轴，元素**默认**由左向右排列
 
-  4. `flex-flow`:
+     - `row-reveerse`:主轴为横轴，元素由右向左排列
 
-  5. `justify-content`:
+     - `colume`:主轴为纵轴，元素由上至下排列
 
-  6. `align-items`:
+     - `column-reverse`:主轴为纵轴，元素由下至上排列
 
-  7. `align-content`:
+       ![2](https://i-blog.csdnimg.cn/direct/84e8305fd92e490aa8995e7de88c21ec.png)
 
-  
+  3. `flex-wrap`:控制元素是否换行
 
-- 项目属性
+     - `nowrap`:**默认**不换行，元素可能被压缩
 
-  1. `order`:
-  2. `flex-grow`:
-  3. `flex-shrink`:
-  4. `flex-basis`:
-  5. `flex`:
-  6. `align-self`:
-  7. 
+     - `wrap`:换行，第一行在上方
+
+     - `wrap-reverse`:换行，第一行在下方
+
+       ![3](https://i-blog.csdnimg.cn/direct/02a43cb3f4e5497dafb8a4ef736373fb.png)
+
+  4. `flex-flow`:`flex-direction` + `flex-wrap` 的简写
+
+     语法:
+
+     ```
+     .box {
+       flex-flow: <flex-direction><flex-wrap>
+     } 
+     ```
+
+     ![](https://i-blog.csdnimg.cn/direct/cfb08a12fd594a06bab998509546e830.png)
+
+  5. `justify-content`:主轴上的对齐方式
+
+     - `flex-start`:**默认** 左对齐（主轴起点）
+     - `flex-end`:右对齐（主轴终点）
+     - `center`:居中对齐
+     - `space-between`:两端对齐，项目间距相等
+     - `space-around`:项目两侧间距相等（总间距是项目间间距的2倍）
+     - `space-evenly`:项目间距和边缘间距完全相等
+
+     ![](https://i-blog.csdnimg.cn/direct/aca5e9a729a241c786543932ed6eb134.png)
+
+  6. `align-items`:主轴上的对齐方式
+
+     - `stretch`((默认)：项目拉伸填满交叉轴
+     - `flex-start`:交叉轴起点对齐
+     - `flex-end`:交叉轴终点对其
+     - `center`:交叉轴居中对齐
+     - `baseline`:项目基线（文字底部）对齐
+
+     ![](https://i-blog.csdnimg.cn/direct/e8b92b8b417d4cf4a0ce5174797c2d02.png)
+
+  7. `align-content`:交叉轴上的对齐方式（单行）
+
+     - `stretch`(默认)：多行拉伸填满交叉轴
+     - `flex-start`:多行靠交叉轴起点对齐
+     - `flex-end`:多行靠交叉轴终点对齐
+     - `center`:多行居中对齐
+     - `space-between`:多行两端对齐。行间距相等
+     - `space-around`:多行两侧间距相等
+
+     ![](https://i-blog.csdnimg.cn/direct/ee010c99d2094023ae5dc42d64aeda50.png)
+
+- 项目属性（作用于子元素）
+
+  1. `order`:控制项目排列顺序
+
+     默认值为0，越小越靠前（可为负数）
+
+     eg：order：-1；
+
+  2. `flex-grow`:项目的拉伸比例（分配剩余空间）
+
+     默认为0（不拉伸），数越大，占比越大
+
+     eg：如果两个项目分别设置为：1和：2，则剩余空间按1：2分配
+
+  3. `flex-shrink`:项目的收缩比例（空间不足时）
+
+     默认为1（允许收缩），0表示不收缩
+
+  4. `flex-basis`:项目在主轴上的初始尺寸
+
+     默认为auto（项目自身尺寸），可设置具体值（如200px，50%）
+
+  5. `flex`:`flex-grow`+`flex-shrink`+`flex-basis`的缩写
+
+     常用：
+
+     - `flex`: 0 1 auto (默认)  : 不拉伸，可收缩，尺寸自动
+     - `flex`: 1 ：等价于 1 1 0% ：自适应拉伸和收缩
+     - `flex`: none :等价于 0 0 auto ：不拉伸，不收缩
+
+  6. `align-self`:单个项目的交叉轴对齐方式（覆盖容容器的align-items）
+
+     取值同 `align-items`：`stretch`、`flex-start`、`flex-end`、`center`、`baseline`。
+
+     eg：
+
+     ```html
+     align-self：flex-end
+     ```
 
 - 常见应用场景
 
+  1. 水平/垂直居中:容器设置 `justify-content: center` /`align-items: center`
+  2. 自适应布局：`flex=1`自动分配空间
+  3. 导航栏排列：水平分布或者垂直堆叠
+  4. 响应式换行：`flex-wrap: wrap`可实现项目在小屏幕自动换行
+
 - 注意！
+
+  1. Flexbox 是一维布局（一次处理一行或一列）。
+  2. 项目默认不换行，需设置 `flex-wrap: wrap`。
+  3. 主轴和交叉轴方向可通过 `flex-direction` 切换，影响所有对齐属性。
 
 ## Gird布局
 
