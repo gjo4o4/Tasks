@@ -902,7 +902,7 @@
 
      - grid-row：3，4的缩写
 
-  7. gird-area:给单个子元素起名字,这个属性就是配合父元素上的grid-template-areas属性来使用，grid-area就是给单个网格项起个名字.
+  7. gird-area:给单个子元素起名字,这个属性就是配合父元素上的grid-template-areas属性来使用，grid-area就是给单个网格项起个名字 。
 
      - 把项目放到哪一个区域：
 
