@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>todo List</title>
+</head>
+<body>
+<script>
+// 使用let来定义数组，arr为数据源，储存所有待办事项字符串
+let arr = [];
+// 创建input输入框DOM元素，此时页面是看不到的，还只是内存里
+const input = document.createElement('input');
+// 创建button按钮对象
+const btn = document.createElement('button');
+ // 设置按钮上显示的文字
+btn.innerText = '添加^^';
+// 创建一个div盒子box，用来存放所有待办项目
+const box = document.createElement('div');
+// 把内存中这些DOM元素（输入框、按钮、盒子）追加到页面body，页面才真正显示出来
+document.body.append(input,btn,box);
+// 自定义的渲染函数：新增，删除代办时调用，根据数组arr，刷新页面上的待办列表
+function show(){
+    // 清空box盒子里面旧的内容，防止重复渲染
+    box.innerHTML = ''; 
+    // for循环遍历待办数组，i是数组下标，循环条件：i从0开始，小于数组长度，i自增
+    for(let i=0;i<arr.length;i++){
+        // 创建p标签，用来放待办文字
+        const p = document.createElement('p');
+       // 把数组里i对应的文字赋值给p标签
+        p.innerText = arr[i]; 
+        // 创建删除按钮
+        const del = document.createElement('button');
+        //设置删除按钮显示文字
+        del.innerText='删除';
+        // 删除按钮点击事件，onclick绑定点击事件；箭头函数，点击按钮执行内部代码；此处形成闭包保存循环下标i
+        del.onclick=()=>{
+            // 从数组下标i的位置，删除1个元素，修改数据源
+            arr.splice(i,1); 
+            //修改show函数，删除完数据后，重新渲染页面
+            show(); 
+        }
+        // 把删除按钮放到p标签里面
+        p.append(del); 
+        // 把包含文字和删除按钮的p标签放到大盒子box
+        box.append(p); 
+    }
+}
+// 给添加按钮绑定onclick点击事件，点击触发函数内部逻辑
+btn.onclick = function(){
+    // 获取输入框内容，trim去掉字符串前后空格
+    let val = input.value.trim(); 
+    // 如果不为空才执行，避免添加空白代办
+    if(val){ 
+        // 将输入代办内容存入数组，更新数据源
+        arr.push(val); 
+        // 清空输入框，方便下次输入
+        input.value=''; 
+        // 调用show渲染函数，根据更新后的数组刷新页面
+        show(); 
+    }
+}
+</script>
+</body>
+</html>
