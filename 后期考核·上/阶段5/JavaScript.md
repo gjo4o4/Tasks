@@ -1446,13 +1446,395 @@
 
 - 严格模式的变化
 
+  1. 变量规定
   
+     在正常模式中，如果一个变量没有声明就赋值，默认是全局变量。严格模式禁止这种用法，变量都必须先用`var` 命令声明，然后再使用。
+  
+     比如：现在有一个函数，我们没有给其变量赋值，在没有给定严格模式前：
+  
+     ```javascript
+     <script>
+             function f1(){
+                 num = 10;
+                 console.log('num的值是：'+num);
+             }
+         	f1();
+     </script>
+     ```
+  
+     打印结果是：
+  
+     ![](https://i-blog.csdnimg.cn/blog_migrate/5e4df089a075862149733e8d6bde124c.png)
+  
+     添加严格模式之后：
+  
+     ```javascript
+     <script>
+             function f1(){
+                 'use strict';
+                 num = 10;
+                 console.log('num的值是：'+num);
+             }
+         f1()
+         </script>
+     ```
+  
+     打印结果为：
+  
+     ![](https://i-blog.csdnimg.cn/blog_migrate/aa68513cfedde9090d50304c01d13835.png)
+  
+     错误❌
+  
+  2. 严格模式下this指向问题
+  
+     - 以前在全局作用域函数中的`this`指向`window`对象。严格模式下全局作用域中函数中的 `this` 是 `undefined`。
+  
+       ```javascript
+       <script>
+               function f1(){
+                   'use strict';
+                  console.log('严格模式下普通函数的this:'+this);
+               }
+           f1()
+       ```
+  
+       输出结果：
+  
+       ![](https://i-blog.csdnimg.cn/blog_migrate/519db2414b217654e3f25db216e9ae1f.png)
+  
+     - 以前构造函数时不加 `new`也可以 调用,当普通函数，`this` 指向全局对象。严格模式下,如果构造函数不加`new`调用, `this`指向的是`undefined`，如果给他赋值则会报错。
+       创建一个构造函数，将其当做普通函数直接调用，因为普通函数正常情况下`this`的指向是`window`
+  
+       ```javascript
+       <script>
+               function Star(){
+                   this.name = 'xl';
+               }
+           Star()
+           </script>
+       ```
+  
+       打印window.name:
+  
+       ```javascript
+       console.log(window.name);
+       ```
+  
+       打印结果：
+  
+       ![](https://i-blog.csdnimg.cn/blog_migrate/989b950dd61fc3a1b71cc0430f8b6553.png)
+  
+       可以得到属性值
+  
+       但是当该函数加入严格模式后打印的结果为：
+  
+       ![](https://i-blog.csdnimg.cn/blog_migrate/bfd4ae0f3cef010857c702ace9d7d509.png)
+  
+       打印结果有误，因为在严格模式下，普通函数的`this`指向`undefine`。
+  
+     - `new` 实例化的构造函数指向创建的对象实例。但是给构造函数通过`new`实例化后呢？
+  
+       ```javascript
+       <script>
+               function Star(){
+                   'use strict'
+                   this.name = 'xl';
+               }
+           var s = new Star();
+           console.log(s.name);
+           </script>
+       ```
+  
+       打印结果：
+  
+       ![](https://i-blog.csdnimg.cn/blog_migrate/a19b8a97148664aff5a7aa7d8ca90f2d.png)
+  
+       即严格模式下`new` 实例化的构造函数指向创建的对象实例
+  
+     - 定时器 `this` 还是指向 `window`。
+       那在定时器的严格模式下`this`又是如何指向的呢？
+  
+       ```javascript
+       <script>
+               'use strict'
+               setTimeout(function(){
+                   console.log(this);
+               })
+           </script>
+       ```
+  
+       打印结果：
+  
+       
+  
+       ![](https://i-blog.csdnimg.cn/blog_migrate/66abcfc6143973b51030d74fd8a75f02.png)
+  
+     ​         在该模式下，定时器 `this` 还是指向`window`。事件、对象还是指向调用者。
+     在严格模式下,事件、对象中的`this`还是指向调用者.
+  
+  3. 函数变化
+  
+     - 函数不能有重名的参数    
+  
+       比如现在有一个函数，我们将它的两个形参命名相同，在进行相应的操作
+  
+       ```javascript
+        <script>
+               'use strict'
+              function fn(a,a){
+                  console.log(a+a);
+              }
+              fn(1,2)
+           </script>
+       ```
+  
+       打印结果：
+  
+       ![](https://i-blog.csdnimg.cn/blog_migrate/d10127b9e35d854a12a76d377765124c.png)
+  
+        是可以正常运行的。但是运行的结果却是错误的。是因为当我们给两个相同的参数时，第二个的值或覆盖掉第一个参数的值。
+           在严格模式下
+  
+       ```javascript
+       <script>
+               'use strict'
+              function fn(a,a){
+                  console.log(a+a);
+              }
+              fn(1,2);
+       </script>
+       ```
+  
+       ![](https://i-blog.csdnimg.cn/blog_migrate/1346bf12e56b4489c02354177dd49dc4.png)
+  
+       可知运行出错。所以函数不能有重名的参数。
+  
+     - 函数声明必须在顶层
+  
+       错误代码：
+  
+       ```javascript
+       if(n === 3){
+       	function fn(){
+       		conssole.log('您输入的值是2');
+       	}
+       	fn();
+       }
+       ```
+  
+       ```javascript
+       for(var i =0;i<=5;i++){
+               function fn(){
+                   console.log('你好')
+               }
+               fn();
+           }
+       ```
+  
+       
 
 ## JSON
 
+JSON (JavaScript Object Notation) 是一种轻量级的数据交换格式，在现代 Web 开发中扮演着至关重要的角色。它以其简洁、易读、易解析的特点，成为了前后端数据交互、数据存储和配置的首选格式。JavaScript 语言本身就内置了对 JSON 的原生支持，使得处理 JSON 数据变得非常便捷。
 
+- 什么是JSON
+
+  JSON 是一种基于文本的数据格式，用于存储和传输结构化数据。它由键值对组成，类似于 JavaScript 的对象字面量，但具有更严格的语法规则。
+
+  - JSON 的常见用途包括：
+
+    1. 前后端数据交互（如 AJAX 请求）。
+    2. 配置文件（如 `.json` 文件）。
+    3. 数据存储（如 NoSQL 数据库）。
+
+  - 主要数据类型：
+
+    1. **对象 (Object):** 用花括号 `{}` 包裹，包含多个键值对，键为字符串，值可以是任何 JSON 数据类型。
+
+       ```javascript
+       {
+         "name": "John Doe",
+         "age": 30,
+         "city": "New York"
+       }
+       ```
+
+    2. **数组 (Array):** 用方括号 `[]` 包裹，包含多个 JSON 数据，可以是对象、数组、字符串、数字或布尔值。
+
+       ```javascript
+       [
+         "apple",
+         "banana",
+         "orange"
+       ]
+       ```
+
+- JSON的特点
+
+  1. 轻量级：相比于 XML，JSON 的格式更简洁，数据量更小。
+  2. 易读性：JSON 使用人类可读的文本格式。
+  3. 语言无关：JSON 是一种独立于编程语言的数据格式，几乎所有主流语言都支持 JSON。
+
+- JSON的语法
+
+  1. 数据类型
+
+     - 字符串: 用双引号包裹，例如 "Hello, world!"。
+
+     - 数字: 可以是整数或浮点数，例如 123 或 3.14。
+
+     - 布尔值: true 或 false。
+
+     - null: 表示空值。
+
+     - 对象: 用花括号 {} 包裹，包含键值对，键为
+
+       字符串，值可以是任何 JSON 数据类型。
+
+     - 数组: 用方括号 [] 包裹，包含多个 JSON 数据，可以是对象、数组、字符串、数字或布尔值。
+
+  2. 键值对
+
+     - 键必须是字符串，用双引号包裹。
+     - 值可以是任何 JSON 数据类型。
+     - 键值对之间用冒号 `:` 分隔。
+
+  3. 语法结构
+
+     - 对象用花括号 `{}` 包裹，键值对之间用逗号 `,` 分隔。
+     - 数组用方括号 `[]` 包裹，元素之间用逗号 `,` 分隔。
+
+  4. ```javascript
+     {
+       "name": "Alice",
+       "age": 25,
+       "isStudent": true,
+       "courses": ["Math", "Science"],
+       "address": {
+         "city": "New York",
+         "zipcode": "10001"
+       }
+     }
+     ```
+
+- JS中处理JSON的方法
+
+  提供了两个核心方法用于处理 JSON 数据：`JSON.parse()` 和 `JSON.stringify()`
+
+  1. JSON.parse()：用于将 JSON 字符串转换为 JavaScript 对象。
+
+     语法：
+
+     ```javascript
+     JSON.parse(text[, reviver])
+     ```
+
+     - `text`：要解析的 JSON 字符串。
+     - `reviver`（可选）：一个转换函数，用于修改解析后的值。
+
+     eg：
+
+     ```javascript
+     const jsonString = '{"name": "Bob", "age": 30}';
+     const obj = JSON.parse(jsonString);
+     console.log(obj.name); // 结果为：Bob
+     ```
+
+     目录结构：
+
+     ```javascript
+     /project
+       ├── index.html
+       ├── script.js
+     ```
+
+     - `index.html`：HTML 文件，用于加载 JavaScript。
+     - `script.js`：JavaScript 文件，包含 JSON 解析代码。
+
+  2. JSON.stringify()：用于将 JavaScript 对象转换为 JSON 字符串。
+
+     语法：
+
+     ```javascript
+     JSON.stringify(value[, replacer[, space]])
+     ```
+
+     - `value`：要转换的 JavaScript 对象。
+     - `replacer`（可选）：一个函数或数组，用于选择或转换属性。
+     - `space`（可选）：用于控制缩进的空格数或字符串。
+
+     eg：
+
+     ```javascript
+     const obj = { name: "Charlie", age: 35 };
+     const jsonString = JSON.stringify(obj);
+     console.log(jsonString); // 结果为：{"name":"Charlie","age":35}
+     
+     ```
+
+     目录结构：
+
+     ```javascript
+     /project
+       ├── index.html
+       ├── script.js
+     ```
+
+     - `index.html`：HTML 文件，用于加载 JavaScript。
+     - `script.js`：JavaScript 文件，包含 JSON 解析代码。
+
+- 应用
+
+  1. 前后端数据交互
+
+     eg：
+
+     ```javascript
+     fetch('https://api.example.com/data')
+       .then(response => response.json())
+       .then(data => console.log(data))
+       .catch(error => console.error('Error:', error));
+     ```
+
+     目录结构：
+
+     ```javascript
+     /project
+       ├── index.html
+       ├── script.js
+     ```
+
+     
+
+  2. 本地存储
+
+     eg：
+
+     ```javascript
+     const user = { name: "Frank", age: 50 };
+     localStorage.setItem('user', JSON.stringify(user));
+     
+     const storedUser = JSON.parse(localStorage.getItem('user'));
+     console.log(storedUser.name); // 结果为：Frank
+     ```
+
+     目录结构：
+
+     ```
+     /project
+       ├── index.html
+       ├── script.js
+     
+     ```
+
+     
+
+  3. 数据序列化和反序列化
+
+  4. 配置文件
 
 ## **DOM API**
+
 
 
 
