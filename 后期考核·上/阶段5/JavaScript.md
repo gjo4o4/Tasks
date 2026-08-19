@@ -1796,20 +1796,22 @@ JSON (JavaScript Object Notation) 是一种轻量级的数据交换格式，在�
        .catch(error => console.error('Error:', error));
      ```
 
-     目录结构：
+     发起网络请求，访问后端接口地址，去拿服务器的数据，返回的是Promise对象。response只是http的响应包，不是能用的js对象，服务器返回的原始响应对象。response.json（），专门解析json，这才是核心，json解析把后端返回的json格式字符串，自动解析成js对象或者数组，供js直接操作。解析完成之后，拿到真正的数据data（js对象），打印到控制台，接下来就可以渲染页面，处理数据。捕获错误，网络断开，接口报错json格式违法，全部都跑到这里，打印错误信息，防止程序直接崩溃
 
+     完整流程：fetch发起请求--收到HTTP响应response--json（）解析json字符串--得到js数据data--使用数据，出错直接进catch
+  
+     目录结构：
+  
      ```javascript
      /project
        ├── index.html
        ├── script.js
      ```
 
-     
-
   2. 本地存储
 
      eg：
-
+  
      ```javascript
      const user = { name: "Frank", age: 50 };
      localStorage.setItem('user', JSON.stringify(user));
@@ -1818,19 +1820,131 @@ JSON (JavaScript Object Notation) 是一种轻量级的数据交换格式，在�
      console.log(storedUser.name); // 结果为：Frank
      ```
 
+     const user = { name: "Frank", age: 50 };这是普通js对象，内存里的数据，刷新页面就消失。localStorage.setItem（‘键名’，存的值）是浏览器本地储存，关闭浏览器数据还在。localStorage只能存字符串，不能直接存对象。JSON.stringify(user)序列化，把js对象变成json格式字符串。localStorage.getItem('user')读取本地，拿到本地的还是那一串·字符串，不是对象，不能直接.name。JSON.parse(...)反序列化，把json字符串变会js对象。现在的storedUser是真正的对象，可以访问.name,.age。console.log(storedUser.name)打印frank
+  
      目录结构：
-
+  
      ```
      /project
        ├── index.html
        ├── script.js
      
      ```
-
-     
-
+  
   3. 数据序列化和反序列化
-
+  
+     - 序列化：序列化是将对象转化为字节序列的过程。对象序列化后可以在网络上传输，或者保存到硬盘上。将对象序列化成json字符串---JSON.stringify(json对象)。
+  
+       语法：
+  
+       ```javascript
+       JSON.parse(str, reviver);
+       ```
+  
+       - `str`：要解析的 JSON字符串
+  
+         `reviver`：可选的函数 `function(key,value)`，该函数的第一个参数和第二个参数分别代表键值对的键和值，并可以对值进行转换（函数返回值当做处理后的value）
+  
+         eg：
+  
+         ```javascript
+         // JSON.parse() 解析JSON字符串， 将JSON转换为对象
+               let json = '{"name": ["js", "webpack"], "age": 22, "gridFriend": "ljj"}';
+               console.log(JSON.parse(json)); 
+               // {name: Array(2), age: 22, gridFriend: 'ljj'}
+          
+               // 第二个参数是一个函数，key和value代表每个key/value对
+               let result = JSON.parse(json, (key, value) => {
+                 if (key == "age") {
+                   return `年龄：${value}`;
+                 }
+                 return value;
+               });
+               console.log(result);
+               //{name: Array(2), age: '年龄：22', gridFriend: 'ljj'}
+         ```
+  
+         
+  
+     - 反序列化：与上相反，将对象序列化成json字符--- JSON.stringify(json对象)；
+  
+       语法：
+  
+       ```javascript
+       JSON.stringify(value, replacer, space)
+       ```
+  
+       - **value：**将要序列化成 一个 JSON 字符串的值
+  
+       - **replacer：**
+  
+         - 如果该参数是一个函数，则在序列化过程中，被序列化的值的每个属性都会经过该函数的转换和处理
+         - 如果该参数是一个数组，则只有包含在这个数组中的属性名才会被序列化到最终的 JSON 字符串中
+         - 如果该参数为 null 或者未提供，则对象所有的属性都会被序列化
+  
+       - **space：**指定缩进用的空白字符串，用于美化输出
+  
+         - 如果参数是个数字，它代表有多少的空格；上限为10。该值若小于1，则意味着没有空格
+         - 如果该参数为字符串（当字符串长度超过10个字母，取其前10个字母），该字符串将被作为空格
+         - 如果该参数没有提供（或者为 null），将没有空格
+  
+         eg：
+  
+         ```javascript
+               let obj = {
+                 name: "jsx",
+                 age: 22,
+                 lesson: ["html", "css", "js"],
+               };
+               let json = JSON.stringify(obj);
+               console.log(json);
+               // {"name":"jsx","age":22,"lesson":["html","css","js"]}
+          
+               // 第二个参数replacer 为函数时，被序列化的值得属性都会经过该函数转换处理
+               function replacer(key, value) {
+                 if (typeof value === "string") {
+                   return undefined;
+                 }
+                 return value;
+               }
+               let result = JSON.stringify(obj, replacer);
+               console.log(result);
+               // {"age":22,"lesson":[null,null,null]}
+          
+               // 当replacer参数为数组，数组的值代表将被序列化成 JSON 字符串的属性名
+               let result1 = JSON.stringify(obj, ["name", "lesson"]);
+               // 只保留 “name” 和 “lesson” 属性值
+               console.log(result1);
+               // {"name":"jsx","lesson":["html","css","js"]}
+          
+               // 第三个参数spcae,用来控制结果字符串里面的间距
+               let result2 = JSON.stringify(obj, null, 4);
+               console.log(result2);
+               /*{
+                   "name": "jsx",
+                   "age": 22,
+                   "lesson": [
+                       "html",
+                       "css",
+                       "js"
+                   ]
+               }*/
+         ```
+  
+         注意：如果**replacer**是一个函数，则该函数会进行深处理，即如果键值对的值也是一个数组，则也会执行该函数
+  
+         原理：
+  
+         - 转换值如果有 toJSON() 方法，该方法定义什么值将被序列化
+         - 非数组对象的属性不能保证以特定的顺序出现在序列化后的字符串中
+         - 布尔值、数字、字符串的包装对象在序列化过程中会自动转换成对应的原始值，undefined、任意的函数以及 symbol 值，在序列化过程中会被忽略（出现在非数组对象的属性值中时）或者被转换成 null（出现在数组中时）。函数、undefined 被单独转换时，会返回 undefined，如JSON.stringify(function(){}) or JSON.stringify(undefined)
+         - 对包含循环引用的对象（对象之间相互引用，形成无限循环）执行此方法，会抛出错误
+         - 所有以 symbol 为属性键的属性都会被完全忽略掉，即便 replacer 参数中强制指定包含了它们
+         - Date 日期调用了 toJSON() 将其转换为了 string 字符串（同Date.toISOString()），因此会被当做字符串处理
+         - NaN 和 Infinity 格式的数值及 null 都会被当做 null
+         - 其他类型的对象，包括 Map/Set/WeakMap/WeakSet，仅会序列化可枚举的属性
+           
+  
   4. 配置文件
 
 ## **DOM API**
