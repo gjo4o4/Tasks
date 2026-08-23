@@ -1,4 +1,4 @@
-# JavaScript
+#  JavaScript
 
 ## 函数
 
@@ -1248,6 +1248,8 @@
   
             3. 事件执行函数
   
+               ![](https://i-blog.csdnimg.cn/blog_migrate/1b840a457b4e6047bba087fd6f90b19b.png#pic_center)
+            
                ```javascript
                document.onclick = function(){ 
                        console.log('单击了文档页面的某一个地方'); 
@@ -1262,7 +1264,7 @@
                 
                注意: 事件处理函数一般都是小写字母
                ```
-  
+            
                
   
     - 事件的分类
@@ -1288,7 +1290,7 @@
          - onmouseleave:当书鼠标移出某个元素那一刻触发
   
            eg:
-  
+    
          ```
          onclick = function() {
                  console.log('单击了鼠标'); 
@@ -1303,13 +1305,13 @@
          ```
   
       2. 键盘事件
-  
+    
          - onkeydown： 按键按下去（尚未抬起来）
          - onkeyup：   按钮抬起来。
          - onkeypress:    按键一次(不包含功能键，比如退格键、回车键)。
   
       3. 表单事件
-  
+    
          - onsubmit： 表单提交事件
          - onfocus： 一个表单项获得焦点（就是鼠标在输入框中点击，可以输入内容）
          - onblur: 一个表单项失去焦点。（就是鼠标离开输入框，在别的元素发生鼠标事件）
@@ -1318,7 +1320,7 @@
          - oninput：输入框值变化（实时触发）
   
       4. 窗口事件
-  
+    
          - onload: 网页一打开时发生——准确点说，是网页加载完毕时发生。
          - onunload：卸载
          - onresize：窗口大小改变
@@ -1326,13 +1328,13 @@
          - onshchange：URL哈希变化
   
       5. 触摸事件
-  
+    
          - otouchstart：触摸开始
          - touchend ：触摸结束
          - touchmove：触摸移动
   
     - 事件流：事件的传播机制
-  
+    
       1. 事件流基本概念：当 DOM 元素触发事件时，事件并非仅在触发元素上执行，而是会按照特定顺序在 DOM 树中传播，这一过程称为事件流。W3C 标准规定事件流分为三个阶段，顺序不可颠倒：
          1. 捕获阶段：事件从最顶层的document开始，向下传播到目标元素的父级
          2. 目标阶段：事件到达触发事件的目标元素，执行目标元素的事件处理函数
@@ -1353,7 +1355,7 @@
             - 依次经过父级元素直到document和window
             - 大多数事件都会冒泡（focus/blur等少数事件除外）
             - 是默认的事件处理阶段
-  
+    
       
 
 ## 严格模式
@@ -1946,10 +1948,713 @@ JSON (JavaScript Object Notation) 是一种轻量级的数据交换格式，在�
            
   
   4. 配置文件
+  
+     JSON 可以用于存储应用程序的配置信息，例如 API 地址、语言设置等。
+  
+     ```javascript
+     //读取配置文件
+     fetch('config.json')
+       .then(response => response.json())
+       .then(config => {
+         // 使用配置信息
+         console.log(config.apiUrl);
+       });
+     ```
+  
+     
 
 ## **DOM API**
 
+- 什么是DOM API
 
+  DOM是操控页面结构，API是提供的一些方法和属性的一些工具。
+
+  DOM全称为Document Object Model 
+
+  D：文档，文档就是当前的整个网页页面
+  O：元素，对象，html的各种类 型的标签，就是一个元素，比如说 body元素，div元素
+
+  结点：网页中所有的聂荣都可以成为结点（标签结点、注释结点、文本结点、属性结点），使用node表示。
+
+  html中的每个标签都是可以映射到JS中的一个对象的，标签中的内容都可以通过JS对象感知到，JS对象修改对应的属性能够影响到标签的展示，通过这样的DOM API就可以让JS代码来操作页面元素。
+
+  - DOM树
+
+    一个页面的结构是一个树形结构，称为 DOM 树
+    相当于 html 树形结构，为一个多子树结构(一个节点下可以有多个)；每个节点都可以抽象为一个页面文档的对象
+
+  ![](https://i-blog.csdnimg.cn/blog_migrate/ee44a22ab399c07a1ea190bc6fa77d67.png)
+
+  - DOM API：JS 提供的，操作界面元素(节点)的API
+
+- 获取页面元素
+  
+  和css一样，要是想要对元素操作，还是需要先获取到它才行
+  
+  1. querySelector：是对单独一个元素进行选择，如果有多个符合要求的元素，就返回第一个出现的。
+  
+     格式：
+  
+     ```javascript
+         <script>
+             //elem表示选中的是一个元素
+             //document表示从当前的根目录上面寻找,可以指定为任意的对象
+             //querySelector表示选择器,选中第一个出现的元素
+             //里面的参数是一个字符串,表示一个选择器
+             let elem=document.querySelector('div')
+             //控制台可以将选中的元素打印出来,方便查看
+             console.log(elem);
+         </script>
+     ```
+  
+     eg：
+  
+     ```javascript
+     <!DOCTYPE html>
+     <html lang="en">
+     <head>
+         <meta charset="UTF-8">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <title>js demo2</title>
+     </head>
+     <body>
+         <ul>
+             <li>你好</li>
+             <li>世界</li>
+             <li>!!!!</li>
+         </ul>
+         <script>
+            var elem1 = document.querySelector('li');
+            console.log(elem1);
+       
+         </script>
+         
+     </body>
+     </html>
+     ```
+  
+     总结：
+  
+     - selectors 包含一个或多个要匹配的选择器的 DOM字符串 DOMString，该字符串必须是有效的CSS选择器字符串；如果不是，则引发 SYNTAX_ERR 异常
+  
+     - 表示文档中与指定的一组CSS选择器匹配的第一个元素的 html元素 Element 对象.
+  
+     - 如果您需要与指定选择器匹配的所有元素的列表，则应该使用 querySelectorAll()
+  
+     - 可以在任何元素上调用，不仅仅是 document；调用这个方法的元素将作为本次查找的根元素
+  
+       ```javascript
+       <body>
+           <div>
+             <span>span标签</span>
+           </div>
+       </body>
+       <script>
+           //
+           var divElement = document.querySelector("div");
+           console.log(divElement);
+           //
+           var spanElement = divElement.querySelector("span");
+       console.log(spanElement);
+       </script>
+       ```
+  
+     - 关于字符串选择器,必须是合法的有效的选择器,才可以成功识别。所以就有一些关于不同选择器的一些规定，比如：`.box `表示类选择器,选择box类，`#100` 表示id选择器,选择id为100的元素，选择器1’ ‘选择器2’ ‘选择器3’ 表示逐层深入的选择器
+  
+       ```javascript
+       <!DOCTYPE html>
+       <html lang="en">
+       <head>
+           <meta charset="UTF-8">
+           <meta name="viewport" content="width=device-width, initial-scale=1.0">
+           <title>document</title>
+       </head>
+       <body>
+           <div class="one">abc</div>
+           <div id= 'id'>efg</div>
+           <h3>你好世界</h3>
+          <style>
+           .one{
+               width:50px;
+               height:50px;
+               text-align: center;
+               line-height: 50px;
+               background-color: rgb(200, 150, 150);
+           }
+           #id{
+               width:50px;
+               height:50px;
+               text-align: center;
+               line-height:50px;
+               background-color:rgb(0,255,255);
+           }
+          </style>
+           <script>
+              var elem1 = document.querySelector('.one');
+              console.log(elem1);
+              var elem2 = document.querySelector('#id');
+              console.log(elem2);
+              var elem3 = document.querySelector('h3');
+              console.log(elem3);
+           </script>
+           
+       </body>
+       </html>
+       ```
+  
+       ![](https://i-blog.csdnimg.cn/blog_migrate/87287e1f415e93a6985bfce92642f8f7.png)
+  
+  2. querySelectorall：用法和 querySelector 类似，如果想把符合选择的元素都选中就可以使用querySelectorAll函数。使用该函数会返回一个类似于数组的对象，用法和数组相同。
+  
+     格式：
+  
+     ```javascript
+     <body>
+         <p>p1</p>
+         <p>p2</p>
+         <p>p3</p>
+     </body>
+     
+     <script>
+         // 如果选择器返回多个元素，需要使用querySelectorAll，返回的是一个数组，其中包含多个元素
+         var arr = document.querySelectorAll("p");
+         // 遍历数组
+         for(let i=0; i<arr.length; i++){
+             console.log(arr[i]);
+         }
+     </script>
+     ```
+  
+     ![](https://i-blog.csdnimg.cn/blog_migrate/f4e1e9599f6e40683a502415c0a208b4.png#pic_center)
+  
+  eg:
+  
+  ```javascript
+  <body>
+      <ul>
+          <li>你好</li>
+          <li>世界</li>
+          <li>!!!!</li>
+      </ul>
+      <script>
+         var elem1 = document.querySelectorAll('li');
+         console.log(elem1);
+    
+      </script>
+      
+  </body>
+  ```
+  
+  ![](https://i-blog.csdnimg.cn/blog_migrate/019ffd7ec8773bd6ac282379971eafb8.png)
+  
+- 操作元素
+  
+  1. 获取/修改元素内容
+  
+     - innerText
+  
+       Element.innerText 属性表示一个节点及其后代的"渲染"文本内容
+  
+       读操作： var renderedText = HTMLElement.innerText;
+  
+       写操作：HTMLElement.innerText = string;
+  
+       eg：
+  
+       ```javascript
+       <body>
+           <div></div>
+       </body>
+       
+       <script>
+           // 给div 添加内容
+           var div = document.querySelector("div");
+           div.innerText = "innerText设置内容";
+       </script>
+       ```
+  
+       ![](https://i-blog.csdnimg.cn/blog_migrate/9217bf97efb777520d95b15fd755f817.jpeg#pic_center)
+  
+       ![](https://i-blog.csdnimg.cn/blog_migrate/24dd4000451f6339ed700a513bdd13ec.png)
+  
+       缺点：若是修改内容时，带一些 html 的标签作为字符串 ，此时不会把标签渲染成 html 的元素 (不识别 html 标签)
+  
+        innerText 无法获取到 div 内部的 html 结构，只能得到文本内容； 修改页面的时候也会把 span 标签当成文本进行设置，不会渲染为 html 结构
+  
+       ```javascript
+       <script>
+           var div = document.querySelector("div");
+           div.innerText = "<span>innerText设置内容</span>";
+       </script>
+       ```
+  
+       ![](https://i-blog.csdnimg.cn/blog_migrate/89bced8b382dd1f9f1e01c9515a344ec.png#pic_center)
+  
+     - innerHTML
+  
+       Element.innerHTML 属性设置或获取HTML语法表示的元素的后代
+  
+       读操作：var content = element.innerHTML;
+  
+       写操作： element.innerHTML = htmlString;
+  
+       ```javascript
+       <script>
+           var div = document.querySelector("div");
+           div.innerHTML = "<span>innerHTML设置内容</span>";
+       </script>
+       ```
+  
+       通过 innerHTML 获取到的字符串， 不光能获取到页面的 html 结构，同时也能修改结构；并且获取到的内容保留空格和换行
+  
+       ![](https://i-blog.csdnimg.cn/blog_migrate/1e4a44dc0607a40e035caa70a8ffa3fa.png#pic_center)
+  
+       eg:
+  
+       ```javascript
+       <!DOCTYPE html>
+       <html lang="en">
+       <head>
+           <meta charset="UTF-8">
+           <meta name="viewport" content="width=device-width, initial-scale=1.0">
+           <title>js demo2</title>
+       </head>
+       <body>
+           <div>
+               <h3>猜数字游戏</h3>       
+               玩家输入一个1~10的数字:<input id="input_num" type="text"><p></p>
+               <input type="button" value="查看结果" onclick="selectResult()">
+           </div>
+           //用来接收最终结果
+           <div id="result_div"></div>
+           
+           <script>
+            function selectResult(){
+               var randomNum = 1+Math.floor(Math.random()*10);
+               var userInputMun = document.getElementById('input_num').value;
+               var msg;
+               if(randomNum == userInputMun){
+                       msg ="<h4>恭喜你，猜对了</h4>";
+        
+               }else{
+                   msg = "<h4>抱歉，猜错了,正确的数字是："+randomNum+"</h4>";
+               }
+               //先获取到事件源
+               var name = document.getElementById("result_div");
+               //修改页面内容，将div标签中的内容修改成为msg对象中的内容
+               name.innerHTML = msg;  
+            }
+           </script>  
+       </body>
+       </html>
+       ```
+  
+       ![](https://i-blog.csdnimg.cn/blog_migrate/5d4de39650ae484ad2ee30c23da1ba9e.png)
+  
+  2. 获取/修改元素属性
+  
+     通过 Element 对象的属性来直接修改，能影响到页面显示效果
+  
+     eg:
+  
+     - console .dir() 表示，将一个对象中的属性、方法打印出来
+  
+     ```
+     <body>
+         <img src="xiawen2.jpg" alt="加载失败" title="哈温呐">
+     </body>
+     <script>
+         var img = document.querySelector("img");
+         console.dir(img);
+     </script>
+     
+     ```
+  
+     - 修改img的src属性
+  
+       ```javascript
+       <body>
+           <img src="xiawen2.jpg" alt="加载失败" title="哈温呐">
+       </body>
+       <script>
+           var img = document.querySelector("img");
+           console.dir(img);
+           img.src = "xiawen.jpg";
+       </script>
+       ```
+  
+     - 点击图片，切换为另一张图片
+  
+     ```javascript
+     <body>
+         <style>
+             img{
+                 height:200px;
+             }
+         </style>
+         <img src="D:/scenery.jpg" alt="">
+         <script !src>
+            var img = document.querySelector('img');
+            console.dir(img);
+            img.onclick = function(){
+                 if(img.src.indexOf('wo')!== -1){
+                     img.src = 'D:/scenery.jpg';
+                 }else{
+                     img.src = 'D:/scenery2.jpg';
+                 }      
+            }
+         </script>
+     </body>
+     ```
+  
+     ![](https://i-blog.csdnimg.cn/blog_migrate/17f36fdba4402b765c4d14e26ad24866.png)
+  
+  3. 获取/修改样式属性
+  
+     CSS 中指定给元素的属性，都可以通过 JS 来修改
+  
+     - 行内样式操作
+  
+       ```
+       element.style.[属性名] = [属性值];
+       element.style.cssText = [属性名+属性值];
+       ```
+  
+       “行内样式”，通过 style 直接在标签上指定的样式，优先级很高；适用于改的样式比较少的情况
+  
+       eg：
+  
+       ```javascript
+       <div style="font-size: 20px; font-weight: 700;">一朵花花</div>
+       ```
+  
+       ![](https://i-blog.csdnimg.cn/blog_migrate/6d99dedd7b64cebae4599d2a06994a59.png#pic_center)
+  
+       - 点击修改颜色
+  
+         ```javascript
+             // 点击后修改颜色
+             var div = document.querySelector('div');
+             div.onclick = function () {
+                 // 获取 div 标签文本颜色
+                 var curColor = div.style.color;
+                 if(curColor == '' || curColor == 'black'){
+                     div.style.color = "red";
+                 }
+                 else{
+                     div.style.color = "black";
+                 }
+             }
+         ```
+  
+         ![](https://i-blog.csdnimg.cn/blog_migrate/5735d30280062f883a488d9de3d31871.gif#pic_center)
+  
+     - 类名样式操作
+  
+       ```
+       element.className = [CSS 类名];
+       ```
+  
+       修改元素的 CSS 类名，适用于要修改的样式很多的情况
+  
+       - 夜间模式切换
+  
+         ```javascript
+         <style>
+             /* 白天模式: 白底黑字 */
+             .day {
+                 background-color: white;
+                 color: black;
+             }
+             /* 黑夜模式: 黑底白字 */
+             .night {
+                 background-color: black;
+                 color: white;
+             }
+         </style>
+         ```
+  
+         ```javascript
+         <body>
+             <span class="day">花花呀</span>
+         </body>
+         
+         <script>
+             var span = document.querySelector("span");
+             span.onclick = function(){
+                 //获取当前点击的 class
+                 var cls = span.className;
+                 if(cls == 'day') {
+                     span.className = "night";
+                 }
+                 else{
+                     span.className = "day";
+                 }
+             }
+         </script>
+         ```
+  
+         因为class是js的保留字，所以名字叫做className
+  
+         ![](https://i-blog.csdnimg.cn/blog_migrate/ccff32304f9ceaf61d1acc24bb31d084.gif#pic_center)
+  
+  4. 获取/修改表单元素属性
+  
+     表单 (主要是指 input 标签) 的以下属性都可以通过 DOM 来修改
+  
+     - value： input 的值
+     - disabled：禁用
+     - checked：复选框会使用
+     - selected：下拉框会使用
+     - type：input 的类型(文本，密码，按钮，文件等)
+  
+     eg：
+  
+     1. 切换按钮的文本
+  
+        ```javascript
+        <input type="button" id="bf" value="播放">
+        
+         // 选择按钮元素，绑定点击事件，切换显示的文版内容
+         var btn = document.querySelector("#bf");
+         btn.onclick = function(){
+             var content = btn.value;
+             if(content == '播放') {
+                 btn.value = '暂停';
+             }else{
+                 btn.value = '播放';
+             }
+         }
+        ```
+  
+        ![](https://i-blog.csdnimg.cn/blog_migrate/990a762096e28845b30a800ebd3db289.gif#pic_center)
+  
+     2. 点击按钮，文本值+1
+  
+        ```javascript
+        <input type="text" id="sum" value="0">
+        <input type="button" id="sum_btn" value="点我+1">
+        
+        var sum = document.querySelector("#sum");
+        var sumBtn = document.querySelector("#sum_btn");
+        sumBtn.onclick = function(){
+            var count = +sum.value; //返回字符串
+            console.log(count); // 转换成数值
+            sum.value = count + 1;
+        }
+        ```
+  
+        ![](https://i-blog.csdnimg.cn/blog_migrate/1c46dae88ca1412a73d128ec544b60f8.gif#pic_center)
+  
+     3. 全选/取消全选按钮
+  
+        在 HTML 中，属性值设为 “checked” 为选中；而在 JS 中，需要设置为 true / false
+  
+        ```javascript
+        <input type="checkbox" id="all">全部选中
+        <input type="checkbox" class="item">艾希
+        <input type="checkbox" class="item">凯特琳
+        <input type="checkbox" class="item">VN
+        
+        // 全部选择 / 取消
+        var all = document.querySelector("#all");
+        all.onclick = function(){
+            //子复选框
+            var items = document.querySelectorAll(".item");
+            if(all.checked){
+                for(item of items){
+                    item.checked = true;
+                }
+            }  
+            else{
+                for(item of items){
+                    item.checked = false;
+                }
+            }
+        }
+        ```
+  
+        ![](https://i-blog.csdnimg.cn/blog_migrate/9f817782f3e8ac7992cf4499a3415df7.gif#pic_center)
+  
+     4. 优化用户体验
+  
+        ```javascript
+        var all = document.querySelector("#all");
+        var items = document.querySelectorAll(".item");
+        all.onclick = function(){
+            console.log(all.checked);
+            for(item of items){
+                item.checked = all.checked;
+            }
+        }
+        
+        for(item of items){
+            item.onclick = function(){
+                // all 复选框是否被选中
+                let allChecked = true;
+                // 所有子复选框是否被选中
+                for(it of items){
+                    if(!it.checked){
+                        allChecked = false;
+                    }
+                }
+                all.checked = allChecked;
+            }
+        }
+        ```
+  
+        ![](https://i-blog.csdnimg.cn/blog_migrate/5664e38b69c67a805e96e3de2e03cd62.gif#pic_center)
+  
+- 操作节点
+  1. 新增节点
+  
+     - 创建元素节点
+  
+       可以直接在最后的元素后创建
+  
+       ```javascript
+       <input type="text" id="content">
+       <input type="button" id="add" value="内容">
+       <div id="container">
+           <h3>内容</h3>
+       </div>
+       
+       
+       var add = document.querySelector("#add");
+       var content  = document.querySelector("#content");
+       var container  = document.querySelector("#container");
+       add.onclick = function(){
+           // 点击，获取文本框内容
+           var text = content.value;
+           // innerHTML ,先获取 container 中的所有元素，在最后添加元素
+           var html = container.innerHTML;
+           html += "<p>";
+           html += text;
+           html += "</p>";
+           container.innerHTML = html;    
+       }
+       ```
+  
+       ![](https://i-blog.csdnimg.cn/blog_migrate/897029922121c8bbf7e0096d4085bc5d.gif#pic_center)
+  
+       这个方法修改 container 中的所有内容，效率比较差，已有的标签已经渲染了，重新设置又会再次渲染
+       可以使用 createElement 方法来创建一个元素
+  
+       ```
+       var element = document.createElement(tagName[, options]);
+       ```
+  
+       ```javascript
+       var add = document.querySelector("#add");
+       var content  = document.querySelector("#content");
+       var container  = document.querySelector("#container");
+       add.onclick = function(){
+           var text = content.value;
+           // 方式2
+           // 创建一个dom元素(<p>)，然后添加到 container 中，作为最后一个子节点
+           var p = document.createElement("p"); // 创建一个元素
+           p.innerHTML = text; 
+           container.appendChild(p); //添加到dom树形结构中，作为最后一个子节点
+       }
+       ```
+  
+     - 把元素节点插入到DOM树中
+  
+       - 使用appendChild将节点插入到指定节点的最后一个孩子之后
+  
+         ```javascript
+         container.appendChild(p); —— 添加到dom树形结构中，作为最后一个子节点
+         ```
+  
+       - 使用insertBefore将节点插入到指定节点之前
+  
+         ```
+         var insertedNode = parentNode.insertBefore(newNode, referenceNode);
+         ```
+  
+         含义: 在 parentNode 节点中，有一个 insertedNode 的子节点，在这个子节点前，插入一个 newNode 节点
+  
+         - insertedNode 被插入节点(newNode)
+         - parentNode 新插入节点的父节点
+           newNode 用于插入的节点
+         - referenceNode newNode 将要插在这个节点之前
+         - 如果 referenceNode 为 null 则 newNode 将被插入到子节点的末尾
+  
+         注意: referenceNode 引用节点不是可选参数
+  
+         补充：DOM 对象，其中包含属性:
+  
+         - dom.children： 返回 DOM 对象下一级左右的子节点数组
+         - dom.parentNode：返回该 DOM 对象上一级的父节点
+  
+         ```javascript
+         <div id="insertBeforeDiv">
+             <p>11111</p>
+             <p>22222</p>
+             <p>33333</p>
+             <p>44444</p>
+         </div>
+         
+         // insertBefore 学习
+         var insertBeforeDiv = document.querySelector("#insertBeforeDiv");
+         // 准备要插入的节点
+         var insertNode = document.createElement("p");
+         insertNode.innerHTML = "新插入节点";
+         insertBeforeDiv.insertBefore(insertNode,  insertBeforeDiv.children[0]);
+         ```
+  
+         ![](https://i-blog.csdnimg.cn/blog_migrate/39947f48502679831302ca172c909dce.png#pic_center)
+  
+         如果节点是页面已存在的，就做移动操作
+  
+         ```javascript
+         <p id="beInsert">原P标签</p>
+         <ul>
+             <li>
+                 <p>p111</p>
+             </li>
+             <li>
+                 <p>p222</p>
+             </li>
+         </ul>
+             
+         var beInsert = document.querySelector("#beInsert");
+         var ul = document.querySelector("ul");
+         // 构造一个 li 标签
+         var li = document.createElement("li");
+         li.appendChild(beInsert); // <li><p>beInsert</p></li>
+         ul.insertBefore(li,ul.children[0]);
+         ```
+  
+         ![](https://i-blog.csdnimg.cn/blog_migrate/454f5fb2ea9fc8dea222bd8e9d973479.png#pic_center)
+  
+  2. 删除节点
+  
+     使用removeChild删除子节点
+  
+     ```
+     oldChild = element.removeChild(child);
+     ```
+  
+     含义:element 作为父节点，删除里边的 child 子节点，返回值 oldChild，作为已经删除的节点，还可以继续使用。
+  
+     -  child 为待删除节点
+     - element 为 child 的父节点
+     - 返回值为该被删除节点
+     - 被删除节点只是从 dom 树被删除了，但是仍然在内存中，可以随时加入到 dom 树的其他位
+       置.
+     - 若 child节点 不是 element 节点的子节点，则该方法会抛出异常
+  
+     eg：删除 ul 中的最后一个 li
+  
+     ```javascript
+     var last = ul.children[ul.children.length - 1]; // 取最后一个 li 节点
+     ul.removeChild(last);
+     ```
+  
+     ![](https://i-blog.csdnimg.cn/blog_migrate/f1d92e7522d34a51bcfa71a3b5cea475.png#pic_center)
+  
+  
 
 
 ## 性能优化
