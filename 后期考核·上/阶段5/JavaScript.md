@@ -2654,13 +2654,246 @@ JSON (JavaScript Object Notation) 是一种轻量级的数据交换格式，在�
   
      ![](https://i-blog.csdnimg.cn/blog_migrate/f1d92e7522d34a51bcfa71a3b5cea475.png#pic_center)
   
-  
 
 
 ## 性能优化
 
-- 防抖
-- 节流
+在 JavaScript 开发的过程中，我们经常会与各种高频触发事件打交道，例如窗口大小调整、滚动条滚动以及输入框输入等。倘若对这些事件处理得不够妥当，极有可能引发性能方面的问题，甚至对用户体验产生负面影响。而防抖（Debounce）和节流（Throttle）技术，正是解决此类 问题的得力工具。
+
+
+- 防抖（Debounce）：
+
+  1. 概念
+
+     举个例子，进电梯之后假如门3s关闭，如果这3s内又有人进来了 ，就又会等3s再关门，之前关门的行为就消失了，又要重新等3s再关门，如果这3s又有人进来 就还得在等3s。
+
+     单位时间内，频繁触发事件，只执行最后一次。也就是做一件事，不是立即就做，而是被触发时，会设定一个延迟时间，等这个时间后再做。如果在这个时间内又触发了事件 那么之前设置的延迟定时器就会被清除，然后重新开始计时。只有当延迟时间结束，并且在这期间没有再次触发该事件时，我们真正期望执行的函数才会被执行。只执行最后一次，这就是函数防抖。
+
+     eg：只要鼠标在盒子上移动时，盒子数字快速增加
+
+     ```html
+     <!DOCTYPE html>
+     <html lang="en">
+     <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>Document</title>
+       <style>
+         .box {
+           width: 200px;
+           height: 200px;
+           background-color: darkcyan;
+         }
+       </style>
+     </head>
+     <body>
+       <div class="box"></div>
+       <script>
+         const box = document.querySelector('.box')
+         let i = 1
+         function mouseMove() {
+           box.innerHTML = i++
+         }
+         box.addEventListener('mousemove', mouseMove)
+       </script>
+     </body>
+     </html>
+     ```
+
+  2. 应用场景
+
+     - 搜索框输入：
+
+       在用户进行搜索操作时，每输入一个字符就可能触发一次搜索请求。如果不进行防抖处理，会频繁地向服务器发送请求，这不仅会增加服务器的负载压力，还可能导致网络资源的浪费。通过防抖技术，我们可以设定在用户停止输入 300 毫秒后，再发起搜索请求。这样一来，只有当用户输入完成并暂停一段时间后，才会触发搜索操作，大大减少了不必要的请求次数。
+
+     - 窗口大小调整：
+
+       当用户调整浏览器窗口大小时，会持续触发 resize 事件。如果在这个事件处理函数中执行复杂的布局调整操作，如重新计算元素的位置和大小、重新渲染页面等，频繁的触发会导致大量的计算任务，严重影响页面的性能。使用防抖技术，能够确保在用户停止调整窗口一段时间后，才执行布局调整相关的操作，有效避免了频繁计算带来的性能损耗。
+
+     - 图片懒加载：
+
+       在图片较多的页面中，当图片即将进入视口时会触发相关事件来加载图片。利用防抖可以避免在图片快速接近视口边界时多次触发加载函数，只有当图片稳定在视口内一段时间后才加载，减少不必要的加载请求。例如在一个商品展示页面，有大量商品图片，使用防抖可以优化图片加载，提升页面加载速度。
+
+     - WebSocket：
+
+       当网络状态不稳定时，可能会频繁触发连接状态变化事件。通过防抖，在网络状态频繁变化时不会立即尝试重新连接 WebSocket，而是在网络状态稳定一段时间后再进行连接操作，避免频繁的无效连接尝试，节省网络资源和服务器压力。
+
+  3. 实现
+
+     - 封装防抖函数
+
+       1. 思路：
+
+          - 声明一个定时器变量
+
+          - 当鼠标每次滑动都判断是否有定时器，如果有定时器，先清除以前定时器
+
+          - 如果没有定时器，则开一个定时器
+
+          - 在定时器里面调用要执行的函数
+
+       2. 实现：
+
+          ```javascript
+            const box = document.querySelector('.box')
+            let i = 1
+          
+          function mouseMove() {
+              box.innerHTML = i++
+          }
+          
+          function debounce(fn, t) {
+              // 1.声明一个定时器变量
+              let timer
+              return function () {
+                  // 2.如果有定时器，先清除定时器
+                  if (timer) clearTimeout(timer)
+                  // 3.4.重新设置定时函数
+                  timer = setTimeout(fn, t)
+              }
+          }
+          box.addEventListener('mousemove', debounce(mouseMove, 200))
+          ```
+
+       3. 注意：为什么要return一个函数
+
+          与我们要封装的`debounce()`函数的用法有关，一般会写一个函数在`mousemove`后后面，
+
+          ```javascript
+          box.addEventListener('mousemove', function(){})
+          ```
+
+          这样写其实是在这里定义了一个函数，而并没有调用这个函数，而是`mousemove`事件触发后再调用，但是要封装的` debounce()`函数使用时是以调用的写法写入，在写入后，没有触发`mousemove`事件便会调用，而触发`mousemove`事件却不会调用。而我们加入return并返回函数后，return外的函数在解析完代码时就已经执行，触发`mousemove`事件后，调用的是return返回的函数。
+
+          用代码演示就是这样：
+
+          ```javascript
+          // 1.声明一个定时器变量
+          let timer
+          box.addEventListener('mousemove', function () {
+              // 2.如果有定时器，先清除定时器
+              if (timer) clearTimeout(timer)
+              // 3.重新设置定时函数
+              timer = setTimeout(mouseMove, 200)
+          })
+          ```
+
+     - lodash防抖
+
+       语法：
+
+       ```javascript
+       _.debounce(要执行的函数, 延后执行的时间)
+       ```
+
+       eg：
+
+       ```javascript
+       <!-- 在使用时我已经将lodash的js文件下载到了本地 -->
+       <script src="../lodash.min.js"></script>
+       <script>
+           const box = document.querySelector('.box')
+           let i = 1
+           function mouseMove() {
+             box.innerHTML = i++
+           }
+           box.addEventListener('mousemove', _.debounce(mouseMove, 200))
+         </script>
+       ```
+
+       - 将上面的代码运行，则当鼠标在盒子上移动时，盒子里的数字不会增加
+       - 当鼠标在盒子移动并悬停超过200毫秒时（或者鼠标移出盒子），盒子里的数字增加
+
+- 节流（Throttle）：
+
+  1. 概念
+
+     节流指的是在一定的时间间隔内，无论事件被触发多少次，都只会执行一次函数。可以将其理解为对事件的触发频率进行 “节流”，使得事件处理函数按照我们预先设定的时间间隔来执行。比如水龙头的水流控制，无论你怎么快速地开关水龙头，在一定时间内，流出的水量是有限的，这就类似于节流对事件触发频率的限制。
+
+  2. 应用场景
+
+     - 滚动事件：
+
+       当用户滚动页面时，会频繁地触发 scroll 事件。如果在这个事件处理函数中执行一些如加载更多数据、判断元素是否进入视口等操作，不加限制地频繁执行这些操作，会消耗大量的系统资源，导致页面卡顿。通过节流技术，我们可以设定每 1000 毫秒执行一次加载更多数据的操作，这样既能满足用户的浏览需求，又能保证页面的流畅性。
+
+     - 鼠标点击：
+
+       在某些特定的场景下，我们可能需要限制用户点击按钮的频率。例如，在提交表单的场景中，如果用户快速多次点击提交按钮，可能会导致重复提交数据，给服务器带来不必要的压力，甚至可能引发数据一致性问题。使用节流技术，我们可以设定每 500 毫秒只能点击一次提交按钮，有效避免了重复操作带来的问题。
+
+     - 游戏开发：
+
+       在游戏中，玩家的一些操作（如射击、跳跃等）可能会被玩家快速重复触发。通过节流，我们可以限制玩家操作的频率，确保游戏逻辑的稳定性。例如在一个射击游戏中，限制玩家每 0.5 秒只能射击一次，避免玩家通过快速点击射击按钮获得不公平的优势。
+
+     - 文件上传进度监控
+
+       在上传大文件时，会频繁触发上传进度事件。使用节流可以控制进度更新的频率，避免因频繁更新进度条而占用过多资源，影响文件上传的效率和页面的响应速度。
+
+  3. 实现
+
+     - 封装节流函数
+
+       1. 思路：
+
+          - 声明一个定时器变量
+
+          - 当鼠标每次滑动都判断是否有定时器，如果有定时器已经开启，则不做操作
+
+          - 如果没有定时器，则开一个定时器
+
+          - 定时器到达时间，清空定时器
+
+       2. 实现：
+
+          ```javascript
+          const box = document.querySelector('.box')
+              let i = 1
+          
+              function mouseMove() {
+                box.innerHTML = i++
+              }
+          
+              function debounce(fn, t) {
+                // 1.声明一个空定时器变量
+                let timer = null
+                return function () {
+                  // 2.如果没有定时器，可以设置定时器
+                  if (!timer) {
+                    timer = setTimeout(function () {
+                      fn()
+                      // 4.冷却完，清空定时器
+                      timer = null
+                    }, t)
+                  }
+                  // 3.如果已经有定时器，不做操作
+                }
+              }
+              box.addEventListener('mousemove', debounce(mouseMove, 3000))
+          ```
+
+       3. 
+
+     - lodash节流
+
+       ```javascript
+       <!-- 在使用时我已经将lodash的js文件下载到了本地 -->
+       <script src="../lodash.min.js"></script>
+       <script>
+           const box = document.querySelector('.box')
+           let i = 1
+           function mouseMove() {
+               box.innerHTML = i++
+           }
+           box.addEventListener('mousemove', _.throttle(mouseMove, 3000))
+       </script>
+       ```
+
+       - 将上面的代码运行，当鼠标在盒子上移动时，数字会增加
+       - 但3秒之内移动，数字不会再增加（3秒冷却）
+
+- 区别
+
+  - 执行时机：防抖是在事件停止触发后的延迟时间结束后才执行函数；而节流是按照固定的时间间隔执行函数，与事件是否停止触发没有关系。
+  - 应用场景：防抖更适用于那些需要在用户操作结束后执行一次的场景，比如搜索框输入、文本编辑器 的保存操作等；节流则更适用于需要限制事件触发频率的场景，像滚动事件、频繁点击事件以及一些需要控制数据更新频率的场景
 
 ## Ajax
 
