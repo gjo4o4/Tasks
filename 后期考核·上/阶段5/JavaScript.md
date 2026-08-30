@@ -2897,6 +2897,159 @@ JSON (JavaScript Object Notation) 是一种轻量级的数据交换格式，在�
 
 ## Ajax
 
+- 什么是AJAX
+
+  AJAX 是 异步的 JavaScript 和 XML（Asynchronous JavaScript And XML） 的缩写，是一种实现浏览器与服务器进行数据通信并更新部分网页的技术（在不重新加载整个页面的情况下），是js与服务器交互的手段。其核心是通过 XMLHttpRequest 对象在不重新刷新页面的前提下，与服务器交换数据并更新页面局部内容，AJAX分为同步（async = false）和异步（async = true）
+
+  - 请求：
+
+    1. 同步请求： 同步请求是指当前发出请求后，浏览器什么都不能做，必须得等到请求完成返回数据之后，才会执行后续的代码，相当于生活中的排队，必须等待前一个人完成自己的事物，后一个人才能接着办。也就是说，当JS代码加载到当前AJAX的时候会把页面里所有的代码停止加载，页面处于一个假死状态，当这个AJAX执行完毕后才会继续运行其他代码页面解除假死状态
+    2. 异步请求：异步请求就当发出请求的同时，浏览器可以继续做任何事，Ajax发送请求并不会影响页面的加载与用户的操作，相当于是在两条线上，各走各的，互不影响。一般默认值为true，异步。异步请求可以完全不影响用户的体验效果，无论请求的时间长或者短，用户都在专心的操作页面的其他内容，并不会有等待的感觉。
+
+  - 优势缺点
+
+    1. 优势：
+       - 不需要插件的⽀持，原⽣ js 就可以使⽤
+       - 用户体验好（不需要刷新页面就可以更新数据）
+       - 减轻服务端和带宽的负担
+    2. 缺点：
+       -  搜索引擎的⽀持度不够，因为数据都不在页面上，搜索引擎搜索不到
+
+  - 操作流程
+
+    ![](https://i-blog.csdnimg.cn/blog_migrate/8e18eb12c35c0a3f7f2e5eb0f3273fef.png)
+
+    1. 首先通过PHP页面将数据库中的数据取出
+    2. 取出后转成json格式的字符串，后利用ajax把字符串返还给前台
+    3. 再利用json.parse解析通过循环添加到页面上
+    4. 那么反之，前端的数据可以利用ajax提交到后台
+    5. 但是后台是没有办法直接把这些数据插入到数据库中，所以要先提交到PHP页面上
+    6. 最后再由PHP将数据插入到数据库中
+
+  - 使用
+
+    在 js 中有内置的构造函数来创建 ajax 对象，然后我们就使用ajax 对象的方法去发送请求和接受响应
+
+    ajax的一个的特点是无需刷新页面便可向服务器传输或读写数据(又称无刷新更新页面)，主要是因为XMLHTTP组件XMLHTTPRequest对象。
+
+    ![](https://i-blog.csdnimg.cn/blog_migrate/4473ec0090fee0ae112cafbb34dc92a9.png)
+
+    1. 创建一个ajax对象
+
+       ```javascript
+       // IE9及以上
+       const xhr = new XMLHttpRequest()
+       // IE9以下
+       const xhr = new ActiveXObject('Mricosoft.XMLHTTP')
+       ```
+
+    2. 配置连接信息
+
+       XMLHttpRequest 对象属性描述(用于和服务器交换数据。)
+
+       ![](https://i-blog.csdnimg.cn/blog_migrate/4406fea96e68b2a8054cc9ccd77831c8.png)
+
+       ```javascript
+       //所有现代浏览器（IE7+、Firefox、Chrome、Safari 以及 Opera）均内建 XMLHttpRequest 对象。
+       const xhr = new XMLHttpRequest()
+       // xhr 对象中的 open ⽅法是来配置请求信息的
+       // 第⼀个参数是本次请求的请求⽅式 get / post / put / ...
+       // 第⼆个参数是本次请求的 url 
+       // 第三个参数是本次请求是否异步，默认 true 表示异步，false 表示同步
+       // xhr.open('请求⽅式', '请求地址', 是否异步)
+       xhr.open('get', './data.php')
+       ```
+
+    3. 发送请求
+
+       ```javascript
+       //如需将请求发送到服务器，我们使用 XMLHttpRequest 对象的 open() 和 send() 方法：
+       const xhr = new XMLHttpRequest()
+       xhr.open('get', './data.php')
+       // 使⽤ xhr 对象中的 send ⽅法来发送请求
+       xhr.send()
+       ```
+
+- URL
+
+- 状态码
+
+  - xhr.readyState：用来表示一个 ajax 请求的全部过程中的某一个状态
+
+    ```
+     readyState === 0 : 表示未初始化完成，也就是 open 方法还没有执行 
+     readyState === 1 : 表示配置信息已经完成，也就是执行完 open 之后 
+     readyState === 2 : 表示 send 方法已经执行完成
+     readyState === 3 : 表示正在解析响应内容
+     readyState === 4 : 表示响应内容已经解析完毕，可以在客户端使用了
+    ```
+
+    只有当 readyState === 4 的时候，才可以正常使用服务端给我们的数据，所以，配合 http 状态码为 200 ~ 299
+
+  - readyStateChange
+    这个事件是专⻔用来监听 ajax 对象的 readyState 值改变的的行为。就是只要 readyState 的值发生变化了，那么就会触发该事件，所以就在这个事件中来监听 ajax 的 readyState 是不是到 4 了
+
+    ```javascript
+       const xhr = new XMLHttpRequest() xhr.open('get', './data.php')
+    	xhr.send()
+    	xhr.onreadyStateChange = function () {
+    	// 每次 readyState 改变的时候都会触发该事件
+    	// 我们就在这里判断 readyState 的值是不是到 4
+    	// 并且 http 的状态码是不是 200 ~ 299
+    	if (xhr.readyState === 4 && /^2\d{2|$/.test(xhr.status)) {
+    	// 这里表示验证通过
+    	// 我们就可以获取服务端给我们响应的内容了 }
+    }
+    ```
+
+  - 使用Ajax发送请求时携带参数
+
+    ajax 发送请求是可以携带参数的。参数就是和后台交互的时候给他的一些信息，但是携带参数`get 和 post两个方式还是有区别的。
+
+    与 POST 相比，GET 更简单也更快，并且在大部分情况下都能用。但是在 无法使用缓存文件（更新服务器上的文件或数据库），向服务器发送大量数据（POST 没有数据量限制）， 发送包含未知字符的用户输入时，POST 比 GET 更稳定也更可靠这些情况时，要使用POST
+
+    - GET
+
+      发送一个带有参数的get请求
+
+      ```javascript
+      const xhr = new XMLHttpRequest()
+      // 直接在地址后面加一个 ?，然后以 key=value 的形式传递 // 两个数据之间以 & 分割
+      xhr.open('get', './data.php?a=100&b=200')
+      xhr.send()
+      ```
+
+      这样服务端就能接受到两个参数 一个是 a，值是 100，一个是 b，值是 200
+
+    - POST
+
+      发送一个带有参数的POST请求
+
+      post 请求的参数是携带在请求体中的，所以不需要再 url 后面拼接
+
+      ```javascript
+      	const xhr = new XMLHttpRequest() xhr.open('post', './data.php')
+      	// 如果是用 ajax 对象发送 post 请求，必须要先设置一下请求头中的 content- type
+      	// 告诉一下服务端我给你的是一个什么样子的数据格式 xhr.setRequestHeader('content-type', 'application/x-www-form- urlencoded')
+      	// 请求体直接再 send 的时候写在 () 里面就行
+      	// 不需要问号，直接就是 'key=value&key=value' 的形式 xhr.send('a=100&b=200')
+      ```
+
+      ```javascript
+      // 1. 创建 ajax 对象
+      let xhr = new XMLHttpRequest()
+      // 2. 配置请求信息 xhr.open(‘GET’, ‘./test.php’, true)
+      // 3. 发送请求 xhr.send()
+      // 4. 接受响应 xhr.onload = function () {
+      console.log(xhr.responseText) }
+      ```
+
+- 常见请求方法和数据提交
+
+- 接口文档
+
+- 
+
 ## ES6
 
 - let/const
