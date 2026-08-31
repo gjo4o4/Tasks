@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX概念和axios使用</title>
+</head>
+<body>
+    <p class="my-p"></p >
+    <!--修正cdn地址，删除多余的com/，删掉多余的</script> -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+        axios({
+            url: 'https://hmajax.itheima.net/api/province',
+            method: 'GET'
+        }).then(result => {
+            console.log(result.data.list)
+            document.querySelector('.my-p').innerHTML = result.data.list.join('<br>')
+        }).catch(err => {
+            //捕获网络、接口错误
+            console.log('请求出错：', err)
+        })
+    </script>
+</body>
+</html>
