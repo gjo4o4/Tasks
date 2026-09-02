@@ -11,6 +11,6 @@
 
 <style scoped>
 .el-menu-demo {
-  background-color: #F8C8DC;
+  background-color: #84e2ff;
 }
 </style>

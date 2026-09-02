@@ -18,7 +18,6 @@
     </el-main>
   </el-container>
 
-  <!-- 添加商品弹窗 -->
   <el-dialog v-model="showAddDialog" title="新增商品">
     <el-input v-model="newProduct.name" placeholder="商品名称"></el-input>
     <el-input v-model="newProduct.description" placeholder="商品描述"></el-input>
@@ -31,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import NavBar from '../components/navBar.vue'
 import { useProductStore } from '../stores/products'
