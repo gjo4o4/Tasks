@@ -8,7 +8,6 @@
 </head>
 <body>
     <p class="my-p"></p >
-    <!--修正cdn地址，删除多余的com/，删掉多余的</script> -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     <script>
@@ -19,7 +18,7 @@
             console.log(result.data.list)
             document.querySelector('.my-p').innerHTML = result.data.list.join('<br>')
         }).catch(err => {
-            //捕获网络、接口错误
+        
             console.log('请求出错：', err)
         })
     </script>
